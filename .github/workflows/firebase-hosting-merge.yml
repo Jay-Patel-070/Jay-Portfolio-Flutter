@@ -1,28 +1,41 @@
-steps:
-  - uses: actions/checkout@v4
+# Deploy to Firebase Hosting on merge
 
-  # ✅ Install Flutter SDK
-  - name: Setup Flutter
-    uses: subosito/flutter-action@v2
-    with:
-      flutter-version: stable
+name: Deploy to Firebase Hosting on merge
 
-  # ✅ Enable web support
-  - name: Enable Flutter Web
-    run: flutter config --enable-web
+on:
+  push:
+    branches:
+      - main
 
-  # ✅ Install dependencies
-  - name: Get packages
-    run: flutter pub get
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
 
-  # ✅ Build Flutter Web
-  - name: Build Web
-    run: flutter build web
+    steps:
+      - uses: actions/checkout@v4
 
-  # ✅ Deploy to Firebase
-  - uses: FirebaseExtended/action-hosting-deploy@v0
-    with:
-      repoToken: ${{ secrets.GITHUB_TOKEN }}
-      firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JAY_SOFTWARE_ENGINEER }}
-      channelId: live
-      projectId: jay-software-engineer
+      # ✅ Install Flutter
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: stable
+
+      # ✅ Enable Web
+      - name: Enable Flutter Web
+        run: flutter config --enable-web
+
+      # ✅ Get dependencies
+      - name: Install dependencies
+        run: flutter pub get
+
+      # ✅ Build Flutter Web
+      - name: Build Web
+        run: flutter build web
+
+      # ✅ Deploy to Firebase Hosting
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JAY_SOFTWARE_ENGINEER }}
+          channelId: live
+          projectId: jay-software-engineer
