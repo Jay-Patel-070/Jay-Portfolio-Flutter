@@ -25,8 +25,8 @@ class _HoverAnimationState extends State<HoverAnimation> {
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOutCubic,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeOutExpo,
         transform: Matrix4.identity()
           ..setEntry(3, 2, 0.001) // perspective
           ..rotateX(_isHovered ? widget.tiltTarget : 0.0)

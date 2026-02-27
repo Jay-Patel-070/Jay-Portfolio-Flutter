@@ -32,7 +32,10 @@ class ProjectCard extends StatelessWidget {
               Colors.white.withOpacity(0.01),
             ],
           ),
-          border: Border.all(color: Colors.white.withOpacity(0.1), width: 1.5),
+          border: Border.all(
+            color: Theme.of(context).brightness == Brightness.light ? Colors.black12 : Colors.white.withOpacity(0.1), 
+            width: 1.5,
+          ),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.2),
@@ -84,10 +87,10 @@ class ProjectCard extends StatelessWidget {
                           Expanded(
                             child: Text(
                               project.title,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                                color: Theme.of(context).brightness == Brightness.light ? Colors.black87 : Colors.white,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -100,7 +103,10 @@ class ProjectCard extends StatelessWidget {
                       const SizedBox(height: 8),
                       Text(
                         project.description,
-                        style: const TextStyle(color: Colors.white70, fontSize: 14),
+                        style: TextStyle(
+                          color: Theme.of(context).brightness == Brightness.light ? Colors.black54 : Colors.white70, 
+                          fontSize: 14,
+                        ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),

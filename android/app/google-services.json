@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "98225831516",
+    "project_id": "jay-software-engineer",
+    "storage_bucket": "jay-software-engineer.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:98225831516:android:5ba463ede81d9edf34f099",
+        "android_client_info": {
+          "package_name": "com.example.jay_software_engineer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkBet6jWjXRGGHZ2dyJHsTSR0xeZRiNhI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

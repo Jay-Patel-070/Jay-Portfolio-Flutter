@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../../shared/animations/hover_animation.dart';
 import '../../data/models/contact_form_model.dart';
+import '../../../../shared/widgets/typing_loader.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ContactForm extends StatefulWidget {
   const ContactForm({Key? key}) : super(key: key);
@@ -44,8 +46,12 @@ class _ContactFormState extends State<ContactForm> {
       message: _messageController.text.trim(),
     );
 
-    // Simulate sending to Firebase
-    await Future.delayed(const Duration(seconds: 2));
+    try {
+      await FirebaseFirestore.instance.collection('messages').add(formData.toJson());
+    } catch (e) {
+      if (mounted) setState(() => _isLoading = false);
+      return;
+    }
 
     if (mounted) {
       setState(() {
@@ -138,11 +144,7 @@ class _ContactFormState extends State<ContactForm> {
                   elevation: 5,
                 ),
                 child: _isLoading 
-                    ? const SizedBox(
-                        height: 24, 
-                        width: 24, 
-                        child: CircularProgressIndicator(color: Colors.black, strokeWidth: 3)
-                      )
+                    ? const TypingLoader(fontSize: 16, color: Colors.black)
                     : Text(
                         _isSuccess ? "MESSAGE TRANSMITTED" : "INITIALIZE TRANSMISSION",
                         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1.5),

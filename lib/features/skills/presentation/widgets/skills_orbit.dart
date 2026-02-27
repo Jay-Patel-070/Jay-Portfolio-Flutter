@@ -52,36 +52,44 @@ class _SkillsOrbitState extends State<SkillsOrbit> with SingleTickerProviderStat
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final double radius = screenWidth < 600 ? 120 : 250;
+    final double baseRadius = screenWidth < 600 ? 90 : 250;
     
-    // For safety, only map up to 12 skills around a circle
-    final itemCount = widget.skills.length > 12 ? 12 : widget.skills.length;
+    // For safety, map up to 30 skills across multiple orbits
+    final itemCount = widget.skills.length > 30 ? 30 : widget.skills.length;
     final skillsToDisplay = widget.skills.take(itemCount).toList();
 
     return ScrollReveal(
       delay: 0.2,
       child: Center(
         child: Container(
-          height: radius * 2.5,
-          width: radius * 2.5,
+          height: baseRadius * 3.5,
+          width: baseRadius * 3.5,
           child: Stack(
             alignment: Alignment.center,
             children: [
               // Orbit rings
               Container(
-                width: radius * 2,
-                height: radius * 2,
+                width: baseRadius * 1.2,
+                height: baseRadius * 1.2,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: Theme.of(context).colorScheme.primary.withOpacity(0.2), width: 1),
+                  border: Border.all(color: Theme.of(context).colorScheme.primary.withOpacity(0.15), width: 1),
                 ),
               ),
               Container(
-                width: radius * 1.3,
-                height: radius * 1.3,
+                width: baseRadius * 2.0,
+                height: baseRadius * 2.0,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: Theme.of(context).colorScheme.secondary.withOpacity(0.15), width: 1),
+                  border: Border.all(color: Theme.of(context).colorScheme.secondary.withOpacity(0.1), width: 1),
+                ),
+              ),
+              Container(
+                width: baseRadius * 2.8,
+                height: baseRadius * 2.8,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Theme.of(context).colorScheme.primary.withOpacity(0.05), width: 1),
                 ),
               ),
               // Center Avatar / Core
@@ -134,45 +142,81 @@ class _SkillsOrbitState extends State<SkillsOrbit> with SingleTickerProviderStat
                   return Stack(
                     alignment: Alignment.center,
                     children: List.generate(skillsToDisplay.length, (index) {
-                      final double angle = (2 * math.pi / skillsToDisplay.length) * index;
-                      final double currentAngle = angle + (_controller.value * 2 * math.pi);
+                      final SkillModel skill = skillsToDisplay[index];
+                      // Distribute across 3 orbits
+                      double orbitRadius;
+                      double angleOffset;
+                      int skillsInOrbit;
+                      int orbitIndex;
                       
-                      final double x = radius * math.cos(currentAngle);
-                      final double y = radius * math.sin(currentAngle);
+                      if (index < 6) {
+                        orbitRadius = baseRadius * 0.6;
+                        skillsInOrbit = 6;
+                        orbitIndex = index;
+                        angleOffset = 0;
+                      } else if (index < 18) {
+                        orbitRadius = baseRadius * 1.0;
+                        skillsInOrbit = 12; // index 6-17
+                        orbitIndex = index - 6;
+                        angleOffset = math.pi / 6;
+                      } else {
+                        orbitRadius = baseRadius * 1.4;
+                        skillsInOrbit = skillsToDisplay.length - 18;
+                        orbitIndex = index - 18;
+                        angleOffset = math.pi / 12;
+                      }
+
+                      final double angle = angleOffset + (2 * math.pi / skillsInOrbit) * orbitIndex;
+                      final double direction = (index < 6) ? -1 : (index < 18) ? 1 : -0.5;
+                      final double currentAngle = angle + (_controller.value * 2 * math.pi * direction);
+                      
+                      final double x = orbitRadius * math.cos(currentAngle);
+                      final double y = orbitRadius * math.sin(currentAngle);
 
                       return Transform.translate(
                         offset: Offset(x, y),
                         child: MouseRegion(
-                          onEnter: (_) => _onHoverEnter(skillsToDisplay[index]),
+                          onEnter: (_) => _onHoverEnter(skill),
                           onExit: (_) => _onHoverExit(),
                           child: GestureDetector(
-                            onTap: () => _onHoverEnter(skillsToDisplay[index]),
+                            onTap: () => _onHoverEnter(skill),
                             child: HoverAnimation(
-                              scaleTarget: 1.2,
+                              scaleTarget: 1.15,
                               child: Container(
-                                padding: const EdgeInsets.all(12),
+                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                                 decoration: BoxDecoration(
                                   color: Theme.of(context).scaffoldBackgroundColor,
-                                  shape: BoxShape.circle,
+                                  borderRadius: BorderRadius.circular(20),
                                   border: Border.all(
-                                    color: _hoveredSkill == skillsToDisplay[index] 
+                                    color: _hoveredSkill == skill 
                                         ? Theme.of(context).colorScheme.primary 
-                                        : Colors.white24,
-                                    width: 2,
+                                        : (Theme.of(context).brightness == Brightness.light ? Colors.black12 : Colors.white24),
+                                    width: 1.5,
                                   ),
-                                  boxShadow: _hoveredSkill == skillsToDisplay[index] ? [
+                                  boxShadow: _hoveredSkill == skill ? [
                                     BoxShadow(
-                                      color: Theme.of(context).colorScheme.primary.withOpacity(0.6),
+                                      color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
                                       blurRadius: 15,
                                     )
                                   ] : [],
                                 ),
-                                child: Text(
-                                  skillsToDisplay[index].skillName.substring(0, 1), // Initial letter as mock icon
-                                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                    color: _hoveredSkill == skillsToDisplay[index] ? Theme.of(context).colorScheme.primary : Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    skill.iconUrl.isNotEmpty 
+                                        ? Image.network(skill.iconUrl, height: 16, width: 16, errorBuilder: (c,e,s) => Icon(Icons.code, size: 16, color: Theme.of(context).colorScheme.primary))
+                                        : Icon(Icons.code, size: 16, color: Theme.of(context).colorScheme.primary),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      skill.skillName,
+                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                        color: _hoveredSkill == skill 
+                                            ? Theme.of(context).colorScheme.primary 
+                                            : (Theme.of(context).brightness == Brightness.light ? Colors.black87 : Colors.white70),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),

@@ -3,14 +3,14 @@ class UserModel {
   final String title;
   final String bio;
   final String profileImage;
-  final Map<String, String> socialLinks;
+  final String resumeLink;
 
   UserModel({
     required this.name,
     required this.title,
     required this.bio,
     required this.profileImage,
-    required this.socialLinks,
+    required this.resumeLink,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -19,7 +19,7 @@ class UserModel {
       title: json['title'] ?? '',
       bio: json['bio'] ?? '',
       profileImage: json['profileImage'] ?? '',
-      socialLinks: Map<String, String>.from(json['socialLinks'] ?? {}),
+      resumeLink: json['resumeLink'] ?? '',
     );
   }
 
@@ -29,7 +29,7 @@ class UserModel {
       'title': title,
       'bio': bio,
       'profileImage': profileImage,
-      'socialLinks': socialLinks,
+      'resumeLink': resumeLink,
     };
   }
 }

@@ -22,7 +22,7 @@ class StatsSection extends StatelessWidget {
           return HoverAnimation(
             scaleTarget: 1.1,
             child: Container(
-              width: 250,
+              width: 280,
               padding: const EdgeInsets.all(32),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
@@ -62,12 +62,12 @@ class StatsSection extends StatelessWidget {
                   Text(
                     ach.description,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.white70, fontSize: 16),
+                    style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? Colors.black87 : Colors.white70, fontSize: 16),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     ach.date,
-                    style: const TextStyle(color: Colors.white38, fontSize: 12),
+                    style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? Colors.black54 : Colors.white38, fontSize: 12),
                   ),
                 ],
               ),

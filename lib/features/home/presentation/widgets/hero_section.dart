@@ -5,6 +5,7 @@ import '../../../../core/responsive/responsive_layout.dart';
 import '../../data/models/user_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/theme_controller.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HeroSection extends ConsumerStatefulWidget {
   final UserModel user;
@@ -27,6 +28,13 @@ class _HeroSectionState extends ConsumerState<HeroSection> with SingleTickerProv
     )..repeat();
   }
 
+  void _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    }
+  }
+
   @override
   void dispose() {
     _gridController.dispose();
@@ -45,8 +53,8 @@ class _HeroSectionState extends ConsumerState<HeroSection> with SingleTickerProv
         scaleTarget: 1.05,
         tiltTarget: 0.1,
         child: Container(
-          width: isMobile ? 200 : (isTablet ? 350 : 500),
-          height: isMobile ? 200 : (isTablet ? 350 : 500),
+          width: isMobile ? 300 : (isTablet ? 350 : 500),
+          height: isMobile ? 300 : (isTablet ? 350 : 500),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: Theme.of(context).colorScheme.surface,
@@ -138,6 +146,7 @@ class _HeroSectionState extends ConsumerState<HeroSection> with SingleTickerProv
                       fontSize: isMobile ? 18 : 32,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 2,
+                      color: Theme.of(context).brightness == Brightness.light ? Colors.black87 : Colors.white,
                     ),
                   ),
                 ),
@@ -161,6 +170,36 @@ class _HeroSectionState extends ConsumerState<HeroSection> with SingleTickerProv
               ),
             ),
           ),
+          const SizedBox(height: 32),
+          if (widget.user.resumeLink.isNotEmpty)
+            ScrollReveal(
+              delay: 1.0,
+              slideOffset: const Offset(0, 30),
+              child: HoverAnimation(
+                scaleTarget: 1.05,
+                child: ElevatedButton.icon(
+                  onPressed: () => _launchURL(widget.user.resumeLink),
+                  icon: Icon(
+                    Icons.download, 
+                    color: Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.black,
+                  ),
+                  label: Text(
+                    "DOWNLOAD RESUME",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.5,
+                      color: Theme.of(context).brightness == Brightness.light ? Colors.white : Colors.black,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    elevation: 5,
+                  ),
+                ),
+              ),
+            ),
         ],
       );
     }

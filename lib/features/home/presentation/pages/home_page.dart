@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/repositories/mock_portfolio_repository.dart';
 import '../../../../core/responsive/responsive_layout.dart';
 import '../../../../shared/widgets/app_bar/navigation_bar.dart';
+import '../../../../shared/widgets/typing_loader.dart';
 
 // Import All Feature Sections
 import '../widgets/hero_section.dart';
@@ -60,9 +61,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       appBar: CustomNavigationBar(sectionKeys: sectionKeys),
       drawer: !isDesktop ? MobileDrawer(sectionKeys: sectionKeys) : null,
       body: userAsync.when(
-        loading: () => Center(
-          child: CircularProgressIndicator(color: Theme.of(context).colorScheme.primary),
-        ),
+        loading: () => const TypingLoader(),
         error: (err, stack) => Center(child: Text('Error Booting System: $err')),
         data: (user) {
           return CustomScrollView(
@@ -75,7 +74,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 40),
                   child: ref.watch(skillsProvider).when(
-                        loading: () => const Center(child: CircularProgressIndicator()),
+                        loading: () => const TypingLoader(),
                         error: (e, s) => Center(child: Text('Error: $e')),
                         data: (skills) => SkillsOrbit(skills: skills),
                       ),
@@ -85,7 +84,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               SliverPadding(
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
                 sliver: ref.watch(projectsProvider).when(
-                      loading: () => const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator())),
+                      loading: () => const SliverToBoxAdapter(child: TypingLoader()),
                       error: (e, s) => SliverToBoxAdapter(child: Center(child: Text('Error: $e'))),
                       data: (projects) {
                         return SliverGrid(
@@ -95,7 +94,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 : ResponsiveLayout.isTablet(context)
                                     ? 2
                                     : 3,
-                            childAspectRatio: 0.8,
+                            childAspectRatio: ResponsiveLayout.isMobile(context)
+                                ? 1.0
+                                : ResponsiveLayout.isTablet(context)
+                                    ? 0.9
+                                    : 0.8,
                             crossAxisSpacing: 32,
                             mainAxisSpacing: 32,
                           ),
@@ -115,7 +118,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 800),
                       child: ref.watch(experienceProvider).when(
-                            loading: () => const Center(child: CircularProgressIndicator()),
+                            loading: () => const TypingLoader(),
                             error: (e, s) => Center(child: Text('Error: $e')),
                             data: (exp) => TimelineSection(experienceList: exp),
                           ),
@@ -128,7 +131,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
                   child: ref.watch(achievementsProvider).when(
-                        loading: () => const Center(child: CircularProgressIndicator()),
+                        loading: () => const TypingLoader(),
                         error: (e, s) => Center(child: Text('Error: $e')),
                         data: (stats) => StatsSection(achievements: stats),
                       ),
@@ -142,7 +145,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 800),
                       child: ref.watch(contactProvider).when(
-                            loading: () => const Center(child: CircularProgressIndicator()),
+                            loading: () => const TypingLoader(),
                             error: (e, s) => Center(child: Text('Error: $e')),
                             data: (contactInfo) => ContactSection(contact: contactInfo),
                           ),

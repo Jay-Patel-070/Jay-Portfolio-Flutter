@@ -7,9 +7,11 @@ import '../../features/achievements/data/models/achievement_model.dart';
 import '../../features/contact/data/models/contact_model.dart';
 import 'portfolio_repository.dart';
 
+import 'firebase_portfolio_repository.dart';
+
 // Provider for injecting the repository
 final portfolioRepositoryProvider = Provider<PortfolioRepository>((ref) {
-  return MockPortfolioRepository(); // Swap with FirebasePortfolioRepository later
+  return FirebasePortfolioRepository();
 });
 
 class MockPortfolioRepository implements PortfolioRepository {
@@ -21,10 +23,7 @@ class MockPortfolioRepository implements PortfolioRepository {
       title: 'Full Stack Flutter Developer',
       bio: 'Building futuristic and scalable cross-platform applications.',
       profileImage: 'https://via.placeholder.com/150',
-      socialLinks: {
-        'github': 'https://github.com',
-        'linkedin': 'https://linkedin.com',
-      },
+      resumeLink: 'https://link-to-your-resume.pdf',
     );
   }
 
@@ -71,7 +70,13 @@ class MockPortfolioRepository implements PortfolioRepository {
   Future<List<AchievementModel>> getAchievements() async {
     await Future.delayed(const Duration(milliseconds: 500));
     return [
-      AchievementModel(title: 'Top Contributor', description: 'Open source leader', date: '2023')
+      AchievementModel(title: 'Top Contributor', description: 'Open source leader', date: '2023'),
+      AchievementModel(title: 'Top Contributor', description: 'Open source leader', date: '2023'),
+      AchievementModel(title: 'Top Contributor', description: 'Open source leader', date: '2023'),
+      AchievementModel(title: 'Top Contributor', description: 'Open source leader', date: '2023'),
+      AchievementModel(title: 'Top Contributor', description: 'Open source leader', date: '2023'),
+      AchievementModel(title: 'Top Contributor', description: 'Open source leader', date: '2023'),
+      AchievementModel(title: 'Top Contributor', description: 'Open source leader', date: '2023'),
     ];
   }
 

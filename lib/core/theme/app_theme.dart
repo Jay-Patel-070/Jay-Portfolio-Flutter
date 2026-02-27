@@ -5,20 +5,23 @@ class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       brightness: Brightness.light,
-      primaryColor: const Color(0xFF00FFCC),
+      primaryColor: const Color(0xFF00BFA5),
       scaffoldBackgroundColor: const Color(0xFFF0F4F8),
       colorScheme: const ColorScheme.light(
         primary: Color(0xFF00BFA5),
         secondary: Color(0xFF651FFF),
+        surface: Colors.white,
       ),
       textTheme: TextTheme(
-        displayLarge: GoogleFonts.spaceGrotesk(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.black87),
-        bodyLarge: GoogleFonts.inter(fontSize: 16, color: Colors.black54),
+        displayLarge: GoogleFonts.spaceGrotesk(fontSize: 48, fontWeight: FontWeight.bold, color: const Color(0xFF131A2A)),
+        bodyLarge: GoogleFonts.inter(fontSize: 16, color: const Color(0xFF333333)),
+        bodyMedium: GoogleFonts.inter(color: const Color(0xFF555555)),
+        bodySmall: GoogleFonts.inter(color: const Color(0xFF777777)),
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(color: Color(0xFF131A2A)),
       ),
     );
   }

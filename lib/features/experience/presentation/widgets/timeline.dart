@@ -66,8 +66,8 @@ class TimelineSection extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.7),
-                      border: Border.all(color: Colors.white12),
+                      color: Theme.of(context).brightness == Brightness.light ? Colors.white : Theme.of(context).scaffoldBackgroundColor.withOpacity(0.7),
+                      border: Border.all(color: Theme.of(context).brightness == Brightness.light ? Colors.black12 : Colors.white12),
                       borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
@@ -92,24 +92,24 @@ class TimelineSection extends StatelessWidget {
                         const SizedBox(height: 8),
                         Text(
                           experience.role,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: Theme.of(context).brightness == Brightness.light ? Colors.black87 : Colors.white,
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           experience.company,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
-                            color: Colors.white70,
+                            color: Theme.of(context).brightness == Brightness.light ? Colors.black87 : Colors.white70,
                           ),
                         ),
                         const SizedBox(height: 16),
                         Text(
                           experience.description,
-                          style: const TextStyle(color: Colors.white54, height: 1.5),
+                          style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? Colors.black54 : Colors.white54, height: 1.5),
                         ),
                       ],
                     ),
